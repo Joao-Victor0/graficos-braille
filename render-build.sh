@@ -1,11 +1,18 @@
 #!/usr/bin/env bash
-# Interrompe a execução caso ocorra algum erro
 set -o errexit
 
-# Atualiza os pacotes do Linux e instala o ffmpeg
-apt-get update
-apt-get install -y ffmpeg
+echo "Baixando o motor ffmpeg..."
+wget https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz
+tar -xf ffmpeg-release-amd64-static.tar.xz
 
-# Instala as dependências do Python
+echo "Organizando os arquivos..."
+mkdir -p bin
+cp ffmpeg-*-static/ffmpeg bin/
+cp ffmpeg-*-static/ffprobe bin/
+
+echo "Limpando os arquivos temporários..."
+rm -rf ffmpeg-release-amd64-static.tar.xz ffmpeg-*-static
+
+echo "Instalando pacotes Python..."
 pip install --upgrade pip
 pip install -r requirements.txt
