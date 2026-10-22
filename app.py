@@ -1,8 +1,22 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
 from agente import Agente
 
 app = FastAPI()
+
+# Libera o acesso exclusivamente para o seu site no GitHub Pages
+origens_permitidas = [
+    "https://jhonedourado.github.io/graficos-braille/?id=assintotas"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origens_permitidas,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # A variável global sobe junto com o servidor
 agente = Agente()
