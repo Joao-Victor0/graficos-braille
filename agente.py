@@ -26,7 +26,7 @@ class Agente:
 
         # 2. Inicializando o LLM e o Modelo de Embeddings
         # Usamos o modelo dos servidores da Google para gerar os vetores
-        modelo_embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")        
+        modelo_embeddings = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
         llm = ChatGoogleGenerativeAI(model="gemini-3.6-flash",
                                     temperature=0.2,
                                     max_retries=1)
@@ -188,3 +188,6 @@ class Agente:
 
         except Exception as e:
             return f'Erro ao processar o RAG: {e}.'
+
+agente = Agente()
+agente.estruturar_agente()
