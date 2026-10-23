@@ -21,7 +21,7 @@ async def iniciar_agente(app: FastAPI):
 @asynccontextmanager
 async def carregar_ia(app: FastAPI):
     print("A abrir a porta do servidor imediatamente...")
-    asyncio.create_task(iniciar_agente())
+    asyncio.create_task(iniciar_agente(app))
     yield
 
 
