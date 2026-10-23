@@ -26,7 +26,7 @@ class Agente:
 
         # 2. Inicializando o LLM e o Modelo de Embeddings
         # Usamos o modelo dos servidores da Google para gerar os vetores
-        modelo_embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")        
+        modelo_embeddings = GoogleGenerativeAIEmbeddings(model="text-embedding-004")        
         llm = ChatGoogleGenerativeAI(model="gemini-3.6-flash",
                                     temperature=0.2,
                                     max_retries=1)
