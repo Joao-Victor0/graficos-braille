@@ -43,6 +43,10 @@ app.add_middleware(
 async def get_audio_file(filename: str):
     return FileResponse(f"./{filename}")
 
+@app.get("/")
+async def root():
+    return {"status": "Servidor IA de Acessibilidade Online"}
+
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
