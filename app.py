@@ -1,3 +1,4 @@
+import asyncio
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse
@@ -9,14 +10,20 @@ agente = None
 rag_chain_global = None
 
 # O lifespan carrega a IA apenas após a porta do servidor abrir, evitando bloqueios
+async def iniciar_agente(app: FastAPI):
+    global agente, rag_chain_global
+
+    # O to_thread impede que o código síncrono da IA bloqueie o servidor
+    agente = await asyncio.to_thread(Agente)
+    rag_chain_global = await asyncio.to_thread(agente.estruturar_agente)
+    print("Agente de IA estruturado nos bastidores!")
+
 @asynccontextmanager
 async def carregar_ia(app: FastAPI):
-    global agente, rag_chain_global
-    print("Estruturando o Agente de IA...")
-    agente = Agente()
-    rag_chain_global = agente.estruturar_agente()
-    print("Agente pronto para uso!")
+    print("A abrir a porta do servidor imediatamente...")
+    asyncio.create_task(iniciar_agente())
     yield
+
 
 app = FastAPI(lifespan=carregar_ia)
 
