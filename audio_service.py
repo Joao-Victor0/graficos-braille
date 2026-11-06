@@ -20,6 +20,18 @@ class AudioService:
         # Configuração de voz
         self.voice = "pt-BR-AntonioNeural" #existem outras vozes do Microsoft Edge
 
+        self.wait_message()
+
+
+
+    def wait_message(self):
+        wait_path = os.path.join(self.output_dir, "aguarde.mp3")
+
+        if not os.path.exists(wait_path):
+            message = edge_tts.Communicate(text="Um momento, estou processando sua solicitação.", voice=self.voice)
+            message.save_sync(wait_path)
+
+
     def speech_to_text(self, audio_bytes: bytes) -> str:
         """
         Converte os bytes de áudio recebidos via WebSocket para WAV em memória

@@ -124,6 +124,9 @@ async def websocket_endpoint(websocket: WebSocket, topic: str = None):
                 print("Aviso: Áudio recebido, mas a IA ainda está inicializando.")
                 continue
 
+            # 2. Feedback para o usuário esperar
+            await websocket.send_text('/respostas/aguarde.mp3')
+
             # 2. Converte Áudio para Texto (STT) em thread separada para não travar o loop
             user_text = await asyncio.to_thread(
                 state.audio_service.speech_to_text, 
