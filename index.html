@@ -15,27 +15,26 @@
 <body>
 
 <div class="container">
-    <h1 id="titulo-pagina">Carregando...</h1>
-    <p class="status" id="status-audio">Buscando informações do ambiente...</p>
+    <section class="audio-container">
+        <h1 class="titulo-audio" id="titulo-pagina">Carregando...</h1>
+        <p class="status" id="status-audio">Buscando informações do ambiente...</p>
     
-    <audio id="audio" controls>
-        <source id="fonte-audio" src="" type="audio/mpeg">
-        Seu navegador não suporta a reprodução de áudio.
-    </audio>
+        <audio id="audio" controls>
+            <source id="fonte-audio" src="" type="audio/mpeg">
+            Seu navegador não suporta a reprodução de áudio.
+        </audio>
 
-    <!-- Para teste no ambiente de desenvolvimento -->
-    <!-- <a href="index.html?id=assintotas">Mudar URL</a> -->
+        <!-- Para teste no ambiente de desenvolvimento -->
+        <!-- <a href="index.html?id=assintotas">Mudar URL</a> -->
+    </section>
 
     <section class="chat-container" aria-label="Assistente de Dúvidas sobre o Gráfico">
-        <h2 class="leitor">Tirar dúvidas por áudio</h2>
-        
-        <div id="historico-chat" class="historico-chat" role="log" aria-live="polite" aria-relevant="additions">
-            <!-- Mensagens do chat serão inseridas aqui -->
-        </div>
+        <h2 class="titulo-agente">Tirar dúvidas por áudio</h2>
+        <p class="descricao-agente">Clique no botão abaixo e tire dúvidas com o nosso agente de IA sobre este gráfico.</p>
 
         <div class="chat-controles">
             <button id="btn-gravacao" class="btn-audio" aria-label="Gravar pergunta em áudio">
-                Gravar pergunta ao assistente
+                Gravar pergunta
             </button>
             <!-- Região que lê o estado da gravação para o leitor de tela sem interromper o usuário -->
             <span id="status-gravacao" class="leitor" aria-live="assertive"></span>

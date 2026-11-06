@@ -1,10 +1,20 @@
+:root {
+    --cor-fundo: #202020;
+    --cor-container: #353535;
+    --cor-fonte: #d7d7d7;
+    --fonte-h1: 2rem;
+    --fonte-h2: 1.5rem;
+    --fonte-p: 0.9rem;
+    --fonte-btn: 1rem;
+}
+
 body {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #ddd;
+    background-color: var(--cor-fundo);
     font-family: "Roboto", sans-serif;
     text-align: center;
 }
@@ -13,73 +23,54 @@ body {
     width: 90%;
     max-width: 450px;
     margin: 0 10%;
+    color: var(--cor-fonte);
+}
+
+.audio-container {
     padding: 32px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    background-color: var(--cor-container);
+    border-radius: 16px;
+}
+
+.titulo-audio {
+    margin: 0 0 8px 0;
+    font-size: var(--fonte-h1);
 }
 
 .status {
-    margin-bottom: 20px;
-    color: #444;
-    font-size: 1.2rem;
+    margin: 0 0 32px 0;
+    font-size: var(--fonte-p);
 }
 
 audio {
     width: 100%;
-    margin-top: 20px;
-}
-
-.leitor {
-    position: absolute;
-    clip: rect(0, 0, 0, 0);
 }
 
 .chat-container {
-    margin-top: 40px;
-    padding-top: 16px;
-    border-top: 2px solid #ddd;
+    margin-top: 32px;
+    padding: 32px;
+    background-color: var(--cor-container);
+    border-radius: 16px;
 }
 
-/**/
-.historico-chat {
-    max-height: 200px;
-    overflow-y: auto;
-    text-align: left;
-    margin-bottom: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+.titulo-agente {
+    margin: 0 0 8px 0;
+    font-size: var(--fonte-h2);
 }
 
-.mensagem {
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    line-height: 1.4;
+.descricao-agente {
+    margin: 0 0 16px 0;
+    font-size: var(--fonte-p);
 }
-
-.mensagem.usuario {
-    background-color: #e3f2fd;
-    align-self: flex-end;
-    color: #0d47a1;
-}
-
-.mensagem.bot {
-    background-color: #f1f1f1;
-    align-self: flex-start;
-    color: #212121;
-}
-/**/
 
 .btn-audio {
     width: 100%;
     padding: 12px 16px;
-    color: white;
-    background-color: #0056b3;
+    color: var(--cor-fonte);
+    background-color: #1a589b;
     border: none;
-    border-radius: 32px;
-    font-size: 1.1rem;
+    border-radius: 8px;
+    font-size: var(--fonte-btn);
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.2s, transform 0.1s;
@@ -87,16 +78,9 @@ audio {
 
 .btn-audio:hover, .btn-audio:focus {
     background-color: #003d82;
-    outline: 3px solid #ffbf47;
 }
 
 .btn-audio.gravando {
-    background-color: #d32f2f;
-    animation: pulsar 1.5s infinite;
-}
-
-@keyframes pulsar {
-    0% { opacity: 1; }
-    50% { opacity: 0.7; }
-    100% { opacity: 1; }
+    background-color: #820000;
+    transition: background-color 0.2s, transform 0.1s;
 }
