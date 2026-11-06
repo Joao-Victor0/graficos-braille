@@ -39,6 +39,12 @@ window.addEventListener('DOMContentLoaded', () => {
             caminhoLimpo = caminhoLimpo.substring(1);
         }
 
+        // Se já estiver o áudio de aguarde tocando, pausa e zera antes de tocar a resposta
+        if (audioAssistente){
+            audioAssistente.pause();
+            audioAssistente.currentTime = 0;
+        }
+
         const urlAudioFinal = `${urlAudioBase}/${caminhoLimpo}`;
         console.log("Tentando reproduzir áudio em:", urlAudioFinal);
 
