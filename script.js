@@ -18,6 +18,10 @@ window.addEventListener('DOMContentLoaded', () => {
     const btnGravacao = document.getElementById('btn-gravacao');
     const statusGravacao = document.getElementById('status-gravacao');
 
+    let isRecording = false;
+    let mediaRecorder = null;
+    let audioChunks = [];
+
     // Inicializa a conexão com o Render enviando o tópico correspondente
     ws = new WebSocket(urlServidor);
 
@@ -77,22 +81,70 @@ window.addEventListener('DOMContentLoaded', () => {
         document.title = `Tutor de Cálculo - ${tituloFormatado}`;
         statusAudio.textContent = "Áudio descritivo pronto. Faça sua pergunta à IA abaixo.";
     }
-    
-    // Dispara a lógica de gravação para a IA
-    btnGravacao.addEventListener('click', async function iniciarFluxoGravacao() {
-        // Pausar caso a pessoa esteja gravando outro áudio
-        if (audioAssistente && !audioAssistente.paused){
+
+    btnGravacao.addEventListener('click', async () => {
+        // 1. SE JÁ ESTIVER GRAVANDO: O clique serve para PARAR
+        if (isRecording) {
+            isRecording = false;
+            
+            // Reseta o visual do botão para o estado original
+            btnGravacao.textContent = "Gravar Pergunta";
+            btnGravacao.style.backgroundColor = ""; // Volta à cor padrão
+            
+            if (statusGravacao) statusGravacao.textContent = "Processando áudio...";
+
+            // Manda o gravador parar (isso dispara o evento onstop abaixo)
+            if (mediaRecorder && mediaRecorder.state !== "inactive") {
+                mediaRecorder.stop();
+            }
+            return; // Sai da função para não iniciar uma nova gravação
+        }
+
+        // 2. SE NÃO ESTIVER GRAVANDO: O clique serve para INICIAR
+        isRecording = true;
+        
+        // Altera o visual do botão para o usuário saber que está gravando
+        btnGravacao.textContent = "Parar Gravação";
+        btnGravacao.style.backgroundColor = "#d32f2f"; // Fica vermelho
+        
+        if (statusGravacao) statusGravacao.textContent = "Gravando... Clique novamente para enviar.";
+
+        // Silencia a IA imediatamente (seu código original que estava certinho)
+        if (audioAssistente && !audioAssistente.paused) {
             audioAssistente.pause();
         }
-        
-        try {
-            // Aguarda a gravação terminar e devolve o arquivo em bytes puros
-            const audioBlob = await recordAudio();
-            console.log("Áudio pronto para envio:", audioBlob);
 
-            enviarParaBackend(audioBlob);
+        try {
+            // Pede permissão e liga o microfone
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
+
+            // Vai guardando os pedaços do áudio
+            mediaRecorder.ondataavailable = (event) => {
+                audioChunks.push(event.data);
+            };
+
+            // Quando o mediaRecorder.stop() for chamado (lá no passo 1), ele monta o arquivo e envia
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                console.log("Áudio pronto para envio:", audioBlob);
+                
+                // Envia para o seu back-end
+                enviarParaBackend(audioBlob); 
+                
+                // Desliga a "luz vermelha" do microfone na aba do navegador
+                stream.getTracks().forEach(track => track.stop());
+            };
+
+            // Começa a gravar de fato
+            mediaRecorder.start();
+
         } catch (erro) {
-            console.error("Erro durante a gravação:", erro);
+            console.error("Erro ao acessar o microfone:", erro);
+            isRecording = false;
+            btnGravacao.textContent = "Gravar Pergunta";
+            if (statusGravacao) statusGravacao.textContent = "Erro no microfone. Tente novamente.";
         }
     });
 
