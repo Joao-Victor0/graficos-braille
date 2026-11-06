@@ -80,6 +80,11 @@ window.addEventListener('DOMContentLoaded', () => {
     
     // Dispara a lógica de gravação para a IA
     btnGravacao.addEventListener('click', async function iniciarFluxoGravacao() {
+        // Pausar caso a pessoa esteja gravando outro áudio
+        if (audioAssistente && !audioAssistente.paused){
+            audioAssistente.pause();
+        }
+        
         try {
             // Aguarda a gravação terminar e devolve o arquivo em bytes puros
             const audioBlob = await recordAudio();
@@ -90,6 +95,33 @@ window.addEventListener('DOMContentLoaded', () => {
             console.error("Erro durante a gravação:", erro);
         }
     });
+
+    // Lógica do Pause e Reprodução de Áudio ao clicar
+    document.addEventListener('click', (event) => {
+        // Se o usuário clicar no botão de gravar, ignora para não dar conflito
+        if (event.target.id === 'btn-gravacao') return;
+
+        if (audioAssistente) {
+            if (audioAssistente.paused) {
+                audioAssistente.play();
+            } else {
+                audioAssistente.pause();
+            }
+        }
+    });
+
+    // Lógica do Pause e Reprodução de Áudio pela barra de espaço
+    document.addEventListener('keydown', (event) => {
+        if (event.code === 'Space' && event.target !== 'btn-gravacao'){
+            event.preventDefault();
+
+            if (audioAssistente.paused) {
+                audioAssistente.play();
+            } else {
+                audioAssistente.pause();
+            }
+        }
+    })
 });
 
 function criarCamadaToqueTelaInteira(audio, statusAudio) {
